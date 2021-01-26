@@ -30,7 +30,7 @@ jobs:
       - name: Caching build result
         uses: actions/cache@v2
         with:
-          path: .
+          path: ./**
           key: ${{ github.sha }}
 
       - name: Clean
