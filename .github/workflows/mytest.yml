@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Apache Netbeans Continuous Integration
+name: Test of GitHub Actions cache feature
 
 on:
   push:
