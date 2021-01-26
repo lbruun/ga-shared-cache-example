@@ -43,6 +43,7 @@ jobs:
   use-build:
     name: Using the build
     runs-on: windows-latest
+    needs: [build-all]
 
     steps:
       - name: Using the cached build result
