@@ -1,0 +1,60 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Apache Netbeans Continuous Integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-all:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Caching build result
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: ${{ github.ref }}-${{ hashFiles('**/external/binaries-list') }}
+
+      - name: Clean
+        run: mvn clean
+        
+      - name: Build  (without testing)
+        run: mvn package -DskipTests
+        
+
+  use-build:
+    name: Using the build
+    runs-on: windows-latest
+
+    steps:
+      - name: Using the cached build result
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: ${{ github.ref }}-${{ hashFiles('**/external/binaries-list') }}
+
+      - name: List folder content
+        run: dir /s
+        shell: cmd
+
+      - name: Run tests
+        run: mvn test
+        shell: cmd
