@@ -59,3 +59,21 @@ jobs:
       - name: Run tests
         run: mvn test
         shell: cmd
+
+  use-build-linux:
+    name: Using the build
+    runs-on: ubuntu-latest
+    needs: [build-all]
+
+    steps:
+      - name: Using the cached build result
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: ${{ github.sha }}
+
+      - name: List folder content
+        run: ls -l
+
+      - name: Run tests
+        run: mvn test
